@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">浩浩天气</string>
+    <string name="api_citylist">http://mobile.weather.com.cn/js/citylist.xml</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_weather">WeatherActivity</string>
+</resources>

@@ -76,23 +76,25 @@ public class HHFYDB {
         }
         return list;
     }
+
     /**
      * 将city实例存入数据库
      */
-    public void saveCity(City city){
+    public void saveCity(City city) {
         ContentValues values = new ContentValues();
-        values.put("city_name",city.getCityName());
-        values.put("city_code",city.getCityCode());
-        values.put("province_id",city.getProvinceId());
-        db.insert("City",null,values);
+        values.put("city_name", city.getCityName());
+        values.put("city_code", city.getCityCode());
+        values.put("province_id", city.getProvinceId());
+        db.insert("City", null, values);
     }
+
     /**
      * 从数据库读取city列表
      */
-    public List<City> loadCities(int provinceId){
+    public List<City> loadCities(int provinceId) {
         List<City> list = new ArrayList<>();
-        Cursor cursor = db.query("City",null,"province_id = ?",new String[]{String.valueOf(provinceId)},null,null,null);
-        if (cursor.moveToFirst()){
+        Cursor cursor = db.query("City", null, "province_id = ?", new String[]{String.valueOf(provinceId)}, null, null, null);
+        if (cursor.moveToFirst()) {
             do {
                 City city = new City();
                 city.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -100,26 +102,29 @@ public class HHFYDB {
                 city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
                 city.setProvinceId(cursor.getInt(cursor.getColumnIndex("province_id")));
                 list.add(city);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return list;
-    } /**
+    }
+
+    /**
      * 将county实例存入数据库
      */
-    public void saveCounty(County county){
+    public void saveCounty(County county) {
         ContentValues values = new ContentValues();
-        values.put("county_name",county.getCountyName());
-        values.put("county_code",county.getCountyCode());
-        values.put("city_id",county.getCityId());
-        db.insert("County",null,values);
+        values.put("county_name", county.getCountyName());
+        values.put("county_code", county.getCountyCode());
+        values.put("city_id", county.getCityId());
+        db.insert("County", null, values);
     }
+
     /**
      * 从数据库读取county列表
      */
-    public List<County> loadCounties(int cityId){
+    public List<County> loadCounties(int cityId) {
         List<County> list = new ArrayList<>();
-        Cursor cursor = db.query("County",null,"city_id = ?",new String[]{String.valueOf(cityId)},null,null,null);
-        if (cursor.moveToFirst()){
+        Cursor cursor = db.query("County", null, "city_id = ?", new String[]{String.valueOf(cityId)}, null, null, null);
+        if (cursor.moveToFirst()) {
             do {
                 County county = new County();
                 county.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -127,7 +132,7 @@ public class HHFYDB {
                 county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
                 county.setCityId(cursor.getInt(cursor.getColumnIndex("city_id")));
                 list.add(county);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return list;
     }

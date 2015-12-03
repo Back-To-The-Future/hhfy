@@ -32,7 +32,7 @@ public class HttpUtil {
                     connection.setRequestMethod("GET");
                     connection.setConnectTimeout(10000);
                     connection.setReadTimeout(10000);
-                   // connection.setDoInput(true);
+                    // connection.setDoInput(true);
                     //connection.setDoOutput(true);
                     connection.connect();
                     InputStream inputStream = connection.getInputStream();
@@ -43,14 +43,14 @@ public class HttpUtil {
                         stringBuilder.append(line);
                     }
                     if (listener != null) {
-                        Log.d(TAG, "-----------------"+stringBuilder.toString());
+                        Log.d(TAG, "-----------------" + stringBuilder.toString());
                         listener.onFinish(stringBuilder.toString());
                     }
                 } catch (IOException e) {
                     if (listener != null) {
                         listener.onError(e);
                     }
-                   // e.printStackTrace();
+                    // e.printStackTrace();
                 } finally {
                     if (connection != null)
                         connection.disconnect();

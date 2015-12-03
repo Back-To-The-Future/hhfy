@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.haohaofengyun.hhfy.R;
+import com.haohaofengyun.hhfy.app.service.AutoUpdateService;
 import com.haohaofengyun.hhfy.app.util.HttpCallbackListener;
 import com.haohaofengyun.hhfy.app.util.HttpUtil;
 import com.haohaofengyun.hhfy.app.util.Utility;
@@ -53,6 +54,11 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
      */
     private Button refreshWeather;
 
+    /**
+     * 是否手动更新
+     */
+    private boolean isRefreshByHand = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -91,13 +97,19 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
     private void showWeather() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         cityNameText.setText(prefs.getString("city_name", ""));
-        publishTimeText.setText("今天"+prefs.getString("publish_time", "")+"发布");
+        publishTimeText.setText("今天" + prefs.getString("publish_time", "") + "发布");
         currentDateText.setText(prefs.getString("current_date", ""));
         weatherInfoText.setText(prefs.getString("weather_deps", ""));
         temp1Text.setText(prefs.getString("temp1", ""));
         temp2Text.setText(prefs.getString("temp2", ""));
         cityNameText.setVisibility(View.VISIBLE);
         weatherInfoLayout.setVisibility(View.VISIBLE);
+        //shou'do
+        if (!isRefreshByHand) {
+            Intent intent = new Intent(this, AutoUpdateService.class);
+            startService(intent);
+            isRefreshByHand = false;
+        }
     }
 
     /**
@@ -121,15 +133,16 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.switch_city:
                 Intent intent = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
-                intent.putExtra("from_weather_activity",true);
+                intent.putExtra("from_weather_activity", true);
                 startActivity(intent);
                 finish();
                 break;
             case R.id.refresh_weather:
                 publishTimeText.setText("同步中...");
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-                String weatherCode = prefs.getString("weather_code","");
-                if (!TextUtils.isEmpty(weatherCode)){
+                String weatherCode = prefs.getString("weather_code", "");
+                if (!TextUtils.isEmpty(weatherCode)) {
+                    isRefreshByHand = true;
                     queryWeatherInfo(weatherCode);
                 }
                 break;
@@ -151,7 +164,7 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
                 //从县级编码返回数据解析出天气代码
                 if (type.equals("countyCode")) {
                     String[] codes = response.split("\\|");
-                    if (codes != null && codes.length == 2) {
+                    if (codes.length == 2) {
                         String weatherCode = codes[1];
                         //查询天气信息
                         queryWeatherInfo(weatherCode);
@@ -178,6 +191,4 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
-
 }
